@@ -7,7 +7,7 @@ import Home from './modules/pages/Home'
 function App() {
 
   return (
-    <main className='bg-gray-300 h-screen'>
+   
       <Router>
         <Routes>
           <Route path='/' Component={Login}/>
@@ -15,7 +15,7 @@ function App() {
           <Route path='/home' Component={Home}/>
         </Routes>
       </Router>
-    </main>
+
   )
 }
 
