@@ -51,6 +51,39 @@ const loginUser = async(req, res) => {
 
         if(!isValidPassword) return res.status(400).json("Invalid email or password");
 
+
+        const token = createToken(user._id);
+
+        return res.status(200).json({_id: user.id, token})
+
+    }catch(error){
+        console.log(error)
+        res.send(500).json(error)
+       }
+}
+
+const getUserById = async(req, res) => {
+    const id = req.params.userId;
+
+    try{
+        const user = await userModel.findById(id);
+
+        res.status(200).json(user)
+
+    }catch(error){
+        console.log(error)
+        res.send(500).json(error)
+       }
+}
+
+const getAllUsers = async(req, res) => {
+    const id = req.params.userId;
+
+    try{
+        const user = await userModel.find()
+
+        res.status(200).json(user)
+
     }catch(error){
         console.log(error)
         res.send(500).json(error)
@@ -58,4 +91,4 @@ const loginUser = async(req, res) => {
 }
 
 
-module.exports = { registerUser, loginUser}
+module.exports = { registerUser, loginUser, getUserById, getAllUsers}
