@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom';
 import React from 'react';
+import { LoginParameters } from './type';
+import { loginUser } from './service';
+import useToastNotification from '../common/hooks/useToast';
 
-type LoginParameters = {
-    email: string;
-    password: string
-}
 
 export default function LoginForm() {
-    const onFinish = (e: React.FormEvent<HTMLFormElement>) => {
+    const {openNotification} = useToastNotification();
+    const onFinish = async(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         // Casting `e.target` as HTMLFormElement to access elements
@@ -17,6 +17,17 @@ export default function LoginForm() {
 
 
         const params: LoginParameters = {email , password};
+
+        await loginUser(params)
+        .then((data) => {
+            form.reset();
+            openNotification('success', 'User Login successfully', '');
+            console.log(data)
+        })
+        .catch((error) => {
+            const errorMessage = error.response.data || "An error occurred during registration"; 
+            openNotification('error', errorMessage, '');
+        });
 
 
     }

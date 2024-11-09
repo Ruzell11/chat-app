@@ -24,7 +24,7 @@ export default function RegisterForm() {
                 openNotification('success', 'User registered successfully', '');
             })
             .catch((error) => {
-                const errorMessage = error.response?.data?.message || "An error occurred during registration"; // Customize error handling based on API response
+                const errorMessage = error.response.data || "An error occurred during registration"; 
                 openNotification('error', errorMessage, '');
             });
     }
