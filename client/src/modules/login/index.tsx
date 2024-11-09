@@ -3,17 +3,23 @@ import React from 'react';
 import { LoginParameters } from './type';
 import { loginUser } from './service';
 import useToastNotification from '../common/hooks/useToast';
-import Cookies from 'js-cookie';
+import { useAuthContext } from '../common/store/AuthContext';
 
 
 export default function LoginForm() {
     const { openNotification } = useToastNotification();
+    const { setUserDetails } = useAuthContext() as any;
     const navigate = useNavigate();
+
+    const onSuccess = (data: LoginParameters) => {
+        openNotification('success', 'User Login successfully', '');
+        setUserDetails(data);
+        navigate('/home')
+    }
 
     const onFinish = async(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        // Casting `e.target` as HTMLFormElement to access elements
         const form = e.target as HTMLFormElement;
         const email = (form.elements.namedItem('email') as HTMLInputElement).value;
         const password = (form.elements.namedItem('password') as HTMLInputElement).value;
@@ -24,15 +30,12 @@ export default function LoginForm() {
         await loginUser(params)
         .then((data) => {
             form.reset();
-            openNotification('success', 'User Login successfully', '');
-            Cookies.set('user', JSON.stringify(data));
-            navigate('/home')
+            onSuccess(data);
         })
         .catch((error) => {
             const errorMessage = error.response.data || "An error occurred during registration"; 
             openNotification('error', errorMessage, '');
         });
-
 
     }
     return (

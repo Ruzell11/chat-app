@@ -1,6 +1,10 @@
 import Navbar from "../common/components/Navbar";
+import { useAuthContext } from "../common/store/AuthContext";
 
 const Home = () => {
+    const { userDetails } = useAuthContext() as any;
+
+    console.log(userDetails);
     return (
         <>
             <Navbar />
