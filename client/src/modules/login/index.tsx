@@ -1,6 +1,25 @@
 import { Link } from 'react-router-dom';
+import React from 'react';
+
+type LoginParameters = {
+    email: string;
+    password: string
+}
 
 export default function LoginForm() {
+    const onFinish = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        // Casting `e.target` as HTMLFormElement to access elements
+        const form = e.target as HTMLFormElement;
+        const email = (form.elements.namedItem('email') as HTMLInputElement).value;
+        const password = (form.elements.namedItem('password') as HTMLInputElement).value;
+
+
+        const params: LoginParameters = {email , password};
+
+
+    }
     return (
         <>
             <div className="min-h-screen grid grid-cols-1 md:grid-cols-2">
@@ -17,7 +36,7 @@ export default function LoginForm() {
                     <h2 className="text-4xl font-bold text-gray-800 mb-2">Welcome Back!</h2>
                     <p className="text-gray-600 mb-6">Login to your account</p>
 
-                    <form className="w-full max-w-md space-y-5">
+                    <form className="w-full max-w-md space-y-5" onSubmit={onFinish}>
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium text-gray-600">
                                 Email
