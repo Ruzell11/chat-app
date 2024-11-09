@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { RegisterParameters } from './type';
 import { registerUser } from './service';
 import useToastNotification from '../common/hooks/useToast';
@@ -7,6 +7,8 @@ import useToastNotification from '../common/hooks/useToast';
 
 export default function RegisterForm() {
     const { openNotification } = useToastNotification();
+    const navigate = useNavigate();
+
     const onFinish = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -22,6 +24,7 @@ export default function RegisterForm() {
             .then(() => {
                 form.reset();
                 openNotification('success', 'User registered successfully', '');
+                navigate('/');
             })
             .catch((error) => {
                 const errorMessage = error.response.data || "An error occurred during registration"; 

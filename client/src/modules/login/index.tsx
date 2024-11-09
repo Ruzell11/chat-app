@@ -1,12 +1,15 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import React from 'react';
 import { LoginParameters } from './type';
 import { loginUser } from './service';
 import useToastNotification from '../common/hooks/useToast';
+import Cookies from 'js-cookie';
 
 
 export default function LoginForm() {
-    const {openNotification} = useToastNotification();
+    const { openNotification } = useToastNotification();
+    const navigate = useNavigate();
+
     const onFinish = async(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -22,7 +25,8 @@ export default function LoginForm() {
         .then((data) => {
             form.reset();
             openNotification('success', 'User Login successfully', '');
-            console.log(data)
+            Cookies.set('user', JSON.stringify(data));
+            navigate('/home')
         })
         .catch((error) => {
             const errorMessage = error.response.data || "An error occurred during registration"; 
