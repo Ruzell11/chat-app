@@ -1,13 +1,12 @@
 
-import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import { ContextProviderChildren } from "../type";
 
 const AuthContext = createContext(null);
-interface AuthContextProviderProps {
-    children: ReactNode;
-}
 
-const AuthContextProvider: React.FC<AuthContextProviderProps> = ({ children }) => {
+
+const AuthContextProvider: React.FC<ContextProviderChildren> = ({ children }) => {
     const [userDetails, setUserDetails] = useState({});
     const userCookie = Cookies.get("user")
     

@@ -5,12 +5,14 @@ import Register from './modules/pages/Register';
 import Home from './modules/pages/Home';
 import PrivateRoutes from './modules/common/auth/PrivateRoutes';
 import PublicRoutes from './modules/common/auth/PublicRoutes';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 function App() {
-
+  const queryClient = new QueryClient()
 
   return (
-    <Router>
+    <QueryClientProvider client={queryClient}>
+      <Router>
       <Routes>
         <Route element={<PrivateRoutes />}>
           <Route path='/home' element={<Home />} />
@@ -22,6 +24,7 @@ function App() {
         </Route>
       </Routes>
     </Router>
+    </QueryClientProvider>
   );
 }
 
