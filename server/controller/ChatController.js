@@ -7,10 +7,10 @@ const createChat = async (req, res) => {
 
     try {
         const chat = await chatModel.findOne({
-            members: {$all: [firstId, secondId]}
+            members: { $all: [firstId, secondId] }
         })
 
-        if(chat) return res.status(200).json(chat);
+        if (chat) return res.status(200).json(chat);
 
         const newChat = new chatModel({
             members: [firstId, secondId]
@@ -25,31 +25,31 @@ const createChat = async (req, res) => {
     }
 }
 
-const findUserChats = async(req, res) => {
+const findUserChats = async (req, res) => {
     const userId = req.params.userId;
 
-    try{
+    try {
         const chats = await chatModel.find({
-            members: {$in: [userId]}
+            members: { $in: [userId] }
         });
 
         res.status(200).json(chats);
-    }catch (error) {
+    } catch (error) {
         console.log(error)
         res.send(500).json(error)
     }
 }
 
-const findChats = async(req, res) => {
+const findChats = async (req, res) => {
     const { firstId, secondId } = req.params;
 
-    try{
+    try {
         const chat = await chatModel.findOne({
-            members: {$all: [firstId, secondId]}
+            members: { $all: [firstId, secondId] }
         })
 
         res.status(200).json(chat);
-    }catch (error) {
+    } catch (error) {
         console.log(error)
         res.send(500).json(error)
     }
