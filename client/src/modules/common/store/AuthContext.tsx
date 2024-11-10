@@ -3,7 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { ContextProviderChildren } from "../type";
 
-const AuthContext = createContext(null);
+const AuthContext = createContext<any>(null);
 
 
 const AuthContextProvider: React.FC<ContextProviderChildren> = ({ children }) => {

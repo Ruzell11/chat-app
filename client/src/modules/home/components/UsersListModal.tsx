@@ -18,7 +18,7 @@ const UserListModal: React.FC<UserListModalProps> = ({ visible, onCancel, onSele
     const [selectedUser, setSelectedUser] = useState<string | null>(null);
     const queryClient = useQueryClient()
 
-    const { data: allUsersList, isLoading: isAllUsersLoading, isError: isAllUsersError, } = useQuery({
+    const { data: allUsersList, isLoading: isAllUsersLoading, isError: isAllUsersError} = useQuery({
         queryKey: ['users-list'],
         queryFn: () => getAllUsers(),
     });
