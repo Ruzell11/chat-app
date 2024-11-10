@@ -10,7 +10,7 @@ const Chat = () => {
         <div className="min-h-screen flex justify-center mx-auto h-[100%]">
 
             <div className="w-1/3 flex flex-col p-8 bg-gray-800 text-white rounded-lg md:rounded-none border-r">
-                <UserChatHeader />
+                <UserChatHeader chatsData={chatsData}/>
                 {
                     isLoadingChats ? (
                         <Spin />

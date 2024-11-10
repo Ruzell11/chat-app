@@ -1,21 +1,47 @@
 import React, { useState } from 'react';
 import { Modal, Select, Button } from 'antd';
-
-// Define the types for the props
-interface User {
-    _id: string;
-    name: string;
-}
+import { createChat, getAllUsers } from '../service';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { ChatData, UserData } from '../../common/type';
+import { useAuthContext } from '../../common/store/AuthContext';
 
 interface UserListModalProps {
     visible: boolean;
     onCancel: () => void;
     onSelectUser: (userId: string) => void;
-    users: User[];
+    chatsData: ChatData[]
 }
 
-const UserListModal: React.FC<UserListModalProps> = ({ visible, onCancel, onSelectUser, users }) => {
+
+const UserListModal: React.FC<UserListModalProps> = ({ visible, onCancel, onSelectUser, chatsData }) => {
+    const { userDetails } = useAuthContext() as any;
     const [selectedUser, setSelectedUser] = useState<string | null>(null);
+    const queryClient = useQueryClient()
+
+    const { data: allUsersList, isLoading: isAllUsersLoading, isError: isAllUsersError, } = useQuery({
+        queryKey: ['users-list'],
+        queryFn: () => getAllUsers(),
+    });
+
+    const filteredUsersList = allUsersList?.filter((user: UserData) => {
+        // Check if user is not the logged-in user
+        const isNotCurrentUser = user._id !== userDetails._id;
+
+        // Check if user is not in any existing chat
+        const isNotInChat = !chatsData?.some((chat: ChatData) => chat.members.includes(user._id));
+        
+        return isNotCurrentUser && isNotInChat;
+    });
+
+
+    const chatMutation = useMutation({
+        mutationFn: createChat,
+        onSuccess: () => {
+            queryClient.invalidateQueries('recipientUser');
+            setSelectedUser(null);
+        },
+    })
+
 
     const handleUserChange = (value: string) => {
         setSelectedUser(value);
@@ -23,6 +49,12 @@ const UserListModal: React.FC<UserListModalProps> = ({ visible, onCancel, onSele
 
     const handleSelect = () => {
         if (selectedUser) {
+            const params = {
+                firstId: userDetails._id,
+                secondId: selectedUser
+            }
+
+            chatMutation.mutate(params)
             onSelectUser(selectedUser);
         }
     };
@@ -40,8 +72,9 @@ const UserListModal: React.FC<UserListModalProps> = ({ visible, onCancel, onSele
                     value={selectedUser}
                     onChange={handleUserChange}
                     style={{ width: '100%' }}
+                    loading={isAllUsersLoading}
                 >
-                    {users.map((user) => (
+                    {filteredUsersList?.map((user: UserData) => (
                         <Select.Option key={user._id} value={user._id}>
                             {user.name}
                         </Select.Option>

@@ -2,38 +2,27 @@ import React, { useState } from 'react';
 import { Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import UserListModal from './UsersListModal';
+import { ChatData } from '../../common/type';
 
-// Define the types for the users array
-interface User {
-    _id: string;
-    name: string;
+
+interface UserChatHeaderInterface {
+    chatsData: ChatData[]
 }
 
-const UserChatHeader: React.FC = () => {
+const UserChatHeader: React.FC<UserChatHeaderInterface> = ({ chatsData }) => {
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-
-    // Mock list of users (static data)
-    const [users] = useState<User[]>([
-        { _id: '1', name: 'User A' },
-        { _id: '2', name: 'User B' },
-        { _id: '3', name: 'User C' },
-    ]);
 
     // Show the modal when the plus button is clicked
     const showModal = () => {
         setIsModalVisible(true);
     };
 
-    // Close the modal
     const handleCancel = () => {
         setIsModalVisible(false);
     };
 
-    // Mock starting a chat with the selected user
-    const handleSelectUser = (userId: string) => {
-        console.log('Starting chat with user:', userId);
-        // You can handle starting the chat here (e.g., setting state, routing, etc.)
-        setIsModalVisible(false); // Close the modal
+    const handleSelectUser = () => {
+        setIsModalVisible(false); 
     };
 
     return (
@@ -54,7 +43,7 @@ const UserChatHeader: React.FC = () => {
                 visible={isModalVisible}
                 onCancel={handleCancel}
                 onSelectUser={handleSelectUser}
-                users={users} // Pass the mock users here
+                chatsData={chatsData}
             />
         </div>
     );

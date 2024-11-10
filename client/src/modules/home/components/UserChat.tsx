@@ -7,8 +7,8 @@ const UserChat = ({ chat }) => {
     const { userDetails } = useAuthContext() as any;
     const recipientUserId = chat?.members.find((id: string) => id != userDetails._id);
 
-    const { data: recipientUserData, isLoading: isLoadingReceipientUserData, isError: isErrorReceipientUserData, } = useQuery({
-        queryKey: ['chats', recipientUserId],
+    const { data: recipientUserData, isLoading: isLoadingReceipientUserData } = useQuery({
+        queryKey: ['recipientUser', recipientUserId],
         queryFn: () => getUserData(recipientUserId),
     });
 
