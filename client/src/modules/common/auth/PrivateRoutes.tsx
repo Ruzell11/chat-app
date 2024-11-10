@@ -2,14 +2,9 @@ import { Navigate, Outlet } from 'react-router-dom'
 import { useAuthContext } from '../store/AuthContext'
 
 const PrivateRoutes = () => {
-    const { userCookie } = useAuthContext() as any
-
-    // Check if userCookie is defined and not empty before parsing
-    const jsonCookie = userCookie ? JSON.parse(userCookie) : null;
-
-    console.log(jsonCookie?.token)
+    const { userDetails } = useAuthContext() as any;
   
-    return jsonCookie?.token ? <Outlet /> : <Navigate to='/' />
+    return userDetails?.token ? <Outlet /> : <Navigate to='/' />
 }
 
 export default PrivateRoutes;

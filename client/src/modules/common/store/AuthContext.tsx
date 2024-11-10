@@ -17,6 +17,7 @@ const AuthContextProvider: React.FC<AuthContextProviderProps> = ({ children }) =
             setUserDetails(JSON.parse(userCookie));
         }
     }, [])
+    
 
     return (
         <AuthContext.Provider value={{
