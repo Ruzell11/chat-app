@@ -1,6 +1,6 @@
 
-import { createContext, ReactNode, useContext, useState } from "react";
-
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import Cookies from "js-cookie";
 
 const AuthContext = createContext(null);
 interface AuthContextProviderProps {
@@ -9,11 +9,20 @@ interface AuthContextProviderProps {
 
 const AuthContextProvider: React.FC<AuthContextProviderProps> = ({ children }) => {
     const [userDetails, setUserDetails] = useState({});
+    const userCookie = Cookies.get("user")
+    
+
+    useEffect(() => {
+        if (userCookie) {
+            setUserDetails(JSON.parse(userCookie));
+        }
+    }, [])
 
     return (
         <AuthContext.Provider value={{
             userDetails,
-            setUserDetails
+            setUserDetails,
+            userCookie
         }}>{children}</AuthContext.Provider>
     )
     

@@ -11,26 +11,25 @@ export default function RegisterForm() {
 
     const onFinish = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
+    
         const form = e.target as HTMLFormElement;
         const name = (form.elements.namedItem('name') as HTMLInputElement).value;
         const email = (form.elements.namedItem('email') as HTMLInputElement).value;
         const password = (form.elements.namedItem('password') as HTMLInputElement).value;
-
-
+    
         const params: RegisterParameters = { name, email, password };
-
-        await registerUser(params)
-            .then(() => {
-                form.reset();
-                openNotification('success', 'User registered successfully', '');
-                navigate('/');
-            })
-            .catch((error) => {
-                const errorMessage = error.response.data || "An error occurred during registration"; 
-                openNotification('error', errorMessage, '');
-            });
-    }
+    
+        try {
+            await registerUser(params);
+            form.reset();
+            openNotification('success', 'User registered successfully', '');
+            navigate('/');
+        } catch (error: any) {
+            const errorMessage = error.response?.data || "An error occurred during registration";
+            openNotification('error', errorMessage, '');
+        }
+    };
+    
     return (
 
         <div className="min-h-screen grid grid-cols-1 md:grid-cols-2">

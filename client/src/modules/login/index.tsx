@@ -4,7 +4,7 @@ import { LoginParameters } from './type';
 import { loginUser } from './service';
 import useToastNotification from '../common/hooks/useToast';
 import { useAuthContext } from '../common/store/AuthContext';
-
+import Cookies from 'js-cookie';
 
 export default function LoginForm() {
     const { openNotification } = useToastNotification();
@@ -14,6 +14,7 @@ export default function LoginForm() {
     const onSuccess = (data: LoginParameters) => {
         openNotification('success', 'User Login successfully', '');
         setUserDetails(data);
+        Cookies.set("user", JSON.stringify(data))
         navigate('/home')
     }
 
